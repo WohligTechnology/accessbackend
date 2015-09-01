@@ -3416,13 +3416,13 @@ class Site extends CI_Controller
 		$this->load->view( 'template', $data );
 	} 
     
-    function uploadproductcsvsubmit()
+    function uploadlistingcsvsubmit()
 	{
         $access = array("1");
 		$this->checkaccess($access);
-        
         $config['upload_path'] = './uploads/';
         $config['allowed_types'] = '*';
+        $config['max_size'] = '1000000';
         $this->load->library('upload', $config);
         $filename="file";
         $file="";
@@ -3432,31 +3432,55 @@ class Site extends CI_Controller
             $file=$uploaddata['file_name'];
             $filepath=$uploaddata['file_path'];
         }
+        else
+        {
+            $data['alerterror']=$this->upload->display_errors();
+
+            $data['redirect']="site/viewlisting";
+            $this->load->view("redirect",$data);
+        }
         $fullfilepath=$filepath."".$file;
-        //"http://storage.googleapis.com/lylalovescsv/product.csv"
+        $file = $this->csvreader->parse_file($fullfilepath);
+        $category=$this->input->get_post('category');
+        $id1=$this->listing_model->createbycsv($file,$category);
+//        echo $id1;
         
-		$this->form_validation->set_rules('url','url','trim');
-        $path=$this->input->get_post('url');
-//        $fullfilepath=file_get_contents($path); 
-        $file = $this->csvreader->parse_file($path);
-        print_r($file);
+        if($id1==0)
+        $data['alerterror']="New listings could not be Uploaded.";
+		else
+		$data['alertsuccess']="listings Uploaded Successfully.";
         
-//        $file = $this->csvreader->parse_file($fullfilepath);
+        $data['redirect']="site/viewlisting";
+        $this->load->view("redirect",$data);
+    }
+    
+    function uploadproductcsvsubmit()
+	{
+        $access = array("1");
+		$this->checkaccess($access);
+        $config['upload_path'] = './uploads/';
+        $config['allowed_types'] = '*';
+        $config['max_size'] = '1000000';
+        $this->load->library('upload', $config);
+        $filename="file";
+        $file="";
+        if (  $this->upload->do_upload($filename))
+        {
+            $uploaddata = $this->upload->data();
+            $file=$uploaddata['file_name'];
+            $filepath=$uploaddata['file_path'];
+        }
+        else
+        {
+            $data['alerterror']=$this->upload->display_errors();
+
+            $data['redirect']="site/viewproduct";
+            $this->load->view("redirect",$data);
+        }
+        $fullfilepath=$filepath."".$file;
+        $file = $this->csvreader->parse_file($fullfilepath);
         $id1=$this->product_model->createbycsv($file);
         
-//		$this->form_validation->set_rules('url','url','trim');
-//        $path=$this->input->get_post('url');
-//        echo $path." path ends";
-//        $fullfilepath=file_get_contents($path); 
-////        $file = $this->csvreader->parse_file($fullfilepath);
-////        print_r($file);
-//        echo $fullfilepath;
-//        $file = $this->csvreader->parse_file($fullfilepath);
-//        echo "file:- ";
-//        print_r($file);
-//        $id1=$this->product_model->createbycsv($file);
-//        echo $id1;
-//        echo $id1;
         if($id1==0)
         $data['alerterror']="New products could not be Uploaded.";
 		else
@@ -3812,7 +3836,18 @@ class Site extends CI_Controller
 			$enddate=$this->input->post('enddate');
 			$status=$this->input->post('status');
             
-			if($this->offer_model->createoffer($title,$description,$price,$startdate,$enddate,$status)==0)
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+            
+			if($this->offer_model->createoffer($title,$description,$price,$startdate,$enddate,$status,$image)==0)
 			$data['alerterror']="New offer could not be created.";
 			else
 			$data['alertsuccess']="offer  created Successfully.";
@@ -3871,7 +3906,25 @@ class Site extends CI_Controller
 			$enddate=$this->input->post('enddate');
 			$status=$this->input->post('status');
             
-			if($this->offer_model->editoffer($id,$title,$description,$price,$startdate,$enddate,$status)==0)
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+            
+            if($image=="")
+            {
+            $image=$this->offer_model->getofferimagebyid($id);
+               // print_r($image);
+                $image=$image->image;
+            }
+            
+			if($this->offer_model->editoffer($id,$title,$description,$price,$startdate,$enddate,$status,$image)==0)
 			$data['alerterror']="offer Editing was unsuccesful";
 			else
 			$data['alertsuccess']="offer edited Successfully.";
@@ -4159,7 +4212,18 @@ class Site extends CI_Controller
 			$name=$this->input->post('name');
 			$order=$this->input->post('order');
             
-			if($this->brand_model->createbrand($name,$order)==0)
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+            
+			if($this->brand_model->createbrand($name,$order,$image)==0)
 			$data['alerterror']="New brand could not be created.";
 			else
 			$data['alertsuccess']="brand  created Successfully.";
@@ -4207,12 +4271,26 @@ class Site extends CI_Controller
 			
 			$name=$this->input->post('name');
 			$order=$this->input->post('order');
-			$price=$this->input->post('price');
-			$startdate=$this->input->post('startdate');
-			$enddate=$this->input->post('enddate');
-			$status=$this->input->post('status');
             
-			if($this->brand_model->editbrand($id,$name,$order)==0)
+			$config['upload_path'] = './uploads/';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg';
+			$this->load->library('upload', $config);
+			$filename="image";
+			$image="";
+			if (  $this->upload->do_upload($filename))
+			{
+				$uploaddata = $this->upload->data();
+				$image=$uploaddata['file_name'];
+			}
+            
+            if($image=="")
+            {
+            $image=$this->brand_model->getbrandlogobyid($id);
+               // print_r($image);
+                $image=$image->logo;
+            }
+            
+			if($this->brand_model->editbrand($id,$name,$order,$image)==0)
 			$data['alerterror']="brand Editing was unsuccesful";
 			else
 			$data['alertsuccess']="brand edited Successfully.";
@@ -4229,6 +4307,24 @@ class Site extends CI_Controller
         $data['redirect']="site/viewbrand";
         $this->load->view("redirect",$data);
 	}
+    
+	function productimagereorder()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+//        $id=$this->input->get_post("id");
+        $products=$this->product_model->getproductsforimageorderchange();
+        foreach($products as $product)
+        {
+            $id=$product->id;
+            $this->product_model->productimagereorderbyid($id);
+        }
+		$data['alertsuccess']="Product Images Reordered Successfully";
+        $data['redirect']="site/index";
+        $this->load->view("redirect",$data);
+	}
+    
+    
     
 }
 ?>

@@ -550,17 +550,17 @@ class User_model extends CI_Model
         //$data = 'Some file data';
 $timestamp=new DateTime();
         $timestamp=$timestamp->format('Y-m-d_H.i.s');
-        file_put_contents("gs://magicmirroruploads/users_$timestamp.csv", $content);
-		redirect("http://magicmirror.in/servepublic?name=users_$timestamp.csv", 'refresh');
-//        if ( ! write_file('./csvgenerated/userfile.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/userfile.csv'), 'refresh');
-//             echo 'File written!';
-//        }
+//        file_put_contents("gs://magicmirroruploads/users_$timestamp.csv", $content);
+//		redirect("http://magicmirror.in/servepublic?name=users_$timestamp.csv", 'refresh');
+        if ( ! write_file('./csvgenerated/userfile.csv', $content))
+        {
+             echo 'Unable to write the file';
+        }
+        else
+        {
+            redirect(base_url('csvgenerated/userfile.csv'), 'refresh');
+             echo 'File written!';
+        }
 	}
     
 	function getidbyemail($useremail)

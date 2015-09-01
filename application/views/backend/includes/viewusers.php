@@ -1,6 +1,16 @@
+<!--
 <div id="page-title">
     <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url("site/createuser"); ?>">Create</a>
     <h1 class="page-header text-overflow">user Details </h1>
+</div>
+-->
+<div class=" row" style="padding:1% 0;">
+	<div class="col-md-10">
+		<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary" href="<?php echo site_url('site/exportusercsv'); ?>"target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>
+	</div>
+	
+	<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary" href="<?php echo site_url('site/createuser'); ?>"><i class="icon-plus"></i>Create </a></div>
+	
 </div>
 <div id="page-content">
     <div class="row">

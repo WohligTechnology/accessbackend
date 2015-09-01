@@ -108,141 +108,91 @@ $(document).ready(function(){
       <aside>
           <div id="sidebar"  class="nav-collapse ">
               <!-- sidebar menu start-->
-              <ul class="sidebar-menu">
-                  <li class="active">
-                      <a class="" href="<?php echo site_url('site/index'); ?>">
-                          <i class="icon-dashboard"></i>
-                          <span>Dashboard</span>
-                      </a>
-                  </li>
-                
-				  <li >
-                      <a href="<?php echo site_url('site/viewusers'); ?>" class="">
-                          <i class="icon-user"></i>
-                          <span>Users</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-				  <li >
-                      <a href="<?php echo site_url('site/viewproduct'); ?>" class="">
-                          <i class="icon-book"></i>
-                          <span>Products</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-				  <li >
-                      <a href="<?php echo site_url('site/viewcategory'); ?>" class="">
-                          <i class="icon-book"></i>
-                          <span>Category</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-				  <li >
-                      <a href="<?php echo site_url('site/viewdiscountcoupon'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Promotions</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-				 
-				 <!-- <li >
-                      <a href="<?php echo site_url('site/vieworderproduct'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Order Products</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>-->
-				
-				  <li class="sub-menu">
-					<a href="javascript:;" class="">
-						<i class="icon-th"></i>
-						<span>CMS</span>
-						<span class="arrow"></span>
-					 </a>
-					 <ul class="sub">
-						<li><a href="<?php echo site_url('site/viewnavigation'); ?>">Navigation</a></li>
-						<li><a href="<?php echo site_url('site/viewpage'); ?>">Page</a></li>
-						<li><a href="<?php echo site_url('site/viewslider'); ?>">Slider</a></li>
-						<li><a href="<?php echo site_url('site/viewbanner1'); ?>">Banner1</a></li>
-						<li><a href="<?php echo site_url('site/viewbanner2'); ?>">Banner2</a></li>
-						<li><a href="<?php echo site_url('site/viewbanner3'); ?>">Banner3</a></li>
-						<li><a href="<?php echo site_url('site/viewcelebcorner'); ?>">Celeb corner</a></li>
-						<li><a href="<?php echo site_url('site/viewbloggerscorner'); ?>">Bloggers corner</a></li>
-					 </ul>
-				  </li>
-				   <li >
-                      <a href="<?php echo site_url('site/viewcurrency'); ?>" class="">
-                          <i class="icon-gbp"></i>
-                          <span>Currency</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-				   <li >
-                      <a href="<?php echo site_url('site/viewpaymentgateway'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Payment Gateway</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/vieworder'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Orders</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/viewpendingorder'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Pending Orders</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/newsletter'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Newsletter</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/limitedstock'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Limited Offer</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/viewcontact'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Contact Us</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                <!--  
-                  <li >
-                      <a href="<?php// echo site_url('site/viewpickofweak'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Pick Of Week</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  -->
-                  <li >
-                      <a href="<?php echo site_url('site/viewslider'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Pick Of Week</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-                  <li >
-                      <a href="<?php echo site_url('site/viewproductwaiting'); ?>" class="">
-                          <i class="icon-money"></i>
-                          <span>Product Waiting</span>
-                          <span class="arrow"></span>
-                      </a>
-                  </li>
-              </ul>
+			  <?php   $menus = $this->menu_model->viewmenus(); 	  ?>
+			  <ul class="sidebar-menu">
+				<?php  
+				foreach($menus as $row)
+				{  
+					$pieces = explode("/", $row->url);
+					$page2="";
+					if(empty($pieces) || !isset($pieces[1]))
+					{
+						$page2="";
+					}
+					else
+						$page2=$pieces[1];
+					$submenus = $this->menu_model->getsubmenus($row->id);
+					?>
+					<li class="<?php if($page==$page2 || $page == strtolower($row->name)) { echo 'active'; } //echo $page2;
+					if(count($submenus > 0)) 
+					{ 
+						$pages =  $this->menu_model->getpages($row->id);
+						//echo $page2; 
+						//print_r($pages);
+						echo ' sub-menu'; 
+						if(in_array($page, $pages,TRUE))
+							echo ' active';
+					}
+					?> ">
+						<a class="" href="<?php 
+						if($row->url == "")
+							echo "javascript:;";
+						else if($row->linktype == 1) echo site_url($row->url);
+						else if($row->linktype == 2) echo base_url($row->url);
+						else if($row->linktype == 3) echo ($row->url);						
+						?>" <?php if($row->linktype == 3) echo "target='_blank'"; ?>>
+							<?php  
+							if($row->icon != "")
+							{  ?>
+								<i class="<?php echo $row->icon; ?>"></i>
+					<?php	}
+							?>
+							<span><?php echo $row->name;  ?></span>
+							<span class="arrow"></span>
+						</a>
+						<?php
+						if(count($submenus) > 0)
+						{  ?>
+							<ul class="sub">
+								<?php
+								foreach($submenus as $row2)
+								{ 
+									$pieces2 = explode("/", $row2->url);
+					
+									if(empty($pieces2) || !isset($pieces2[1]))
+									{
+										$page3="";
+									}
+									else
+										$page3=$pieces2[1];
+								?>
+									<li class="<?php if($page==$page3 || $page == strtolower($row2->name)) { echo 'active'; } ?>">
+										<a href="<?php 
+											if($row2->url == "")
+												echo "javascript:;";
+											else if($row2->linktype == 1) echo site_url($row2->url);
+											else if($row2->linktype == 2) echo base_url($row2->url);
+											else if($row2->linktype == 3) echo ($row2->url);		
+										?>">
+											<?php  
+											if($row2->icon != "")
+											{  ?>
+												<i class="<?php echo $row2->icon; ?>" <?php if($row2->linktype == 3) echo "target='_blank'"; ?>></i>
+									<?php	}
+											?>
+											<?php echo $row2->name;  ?>
+										</a>
+									</li>
+						<?php	}
+								?>
+							</ul>
+				<?php	}
+						?>
+					</li>
+		  <?php }
+				?>
+			  </ul>
+<!--              </ul>-->
               <!-- sidebar menu end-->
           </div>
       </aside>

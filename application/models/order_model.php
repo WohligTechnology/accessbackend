@@ -450,65 +450,47 @@ class Order_model extends CI_Model
         $timestamp=$timestamp->format('Y-m-d_H.i.s');
         //$data = 'Some file data';
 
-//        if ( ! write_file('./csvgenerated/retailerfilefromdashboard.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/retailerfilefromdashboard.csv'), 'refresh');
-//             echo 'File written!';
-//        }
-        file_put_contents("gs://magicmirroruploads/orders_$timestamp.csv", $content);
-		redirect("http://magicmirror.in/servepublic?name=orders_$timestamp.csv", 'refresh');
+//        file_put_contents("gs://magicmirroruploads/orders_$timestamp.csv", $content);
+//		redirect("http://magicmirror.in/servepublic?name=orders_$timestamp.csv", 'refresh');
         //$data = 'Some file data';
 //magicmirroruploads
-//        if ( ! write_file('./csvgenerated/orderfile.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/orderfile.csv'), 'refresh');
-//             echo 'File written!';
-//        }
+        if ( ! write_file('./csvgenerated/orderfile.csv', $content))
+        {
+             echo 'Unable to write the file';
+        }
+        else
+        {
+            redirect(base_url('csvgenerated/orderfile.csv'), 'refresh');
+             echo 'File written!';
+        }
 	}
     function exportorderitemcsv()
 	{
 		$this->load->dbutil();
-		$query=$this->db->query("SELECT `order`.`id` AS `Order ID`,`order`.`timestamp` AS `Date`,'Completed' AS `Order status`,'0' AS `Shipping`,'0' AS `Shipping Tax`,'0' AS `OrderDiscount`,`product`.`id` AS `ProductID`,`product`.`name` AS `Item Name`,`product`.`price` AS `Item Amount`,`product`.`quantity`AS`Quantity`, `order`.`email` AS `Email`
+		$query=$this->db->query("SELECT `order`.`id` AS `Order ID`,`order`.`timestamp` AS `Date`,'Completed' AS `Order status`,'0' AS `Shipping`,'0' AS `Shipping Tax`,'0' AS `OrderDiscount`,`product`.`id` AS `ProductID`,`product`.`name` AS `Item Name`,`product`.`price` AS `Item Amount`,`product`.`quantity`AS`Quantity`, `order`.`email` AS `Email`,`orderstatus`.`name` AS `Status`
         FROM `orderitems`
 		INNER JOIN `order` ON `order`.`id`=`orderitems`.`order` 
-		INNER JOIN `product` ON `product`.`id`=`orderitems`.`product`");
+		INNER JOIN `product` ON `product`.`id`=`orderitems`.`product`
+        LEFT OUTER JOIN `orderstatus` ON `orderstatus`.`id`=`order`.`orderstatus`");
 
        $content= $this->dbutil->csv_from_result($query);
         
         $timestamp=new DateTime();
         $timestamp=$timestamp->format('Y-m-d_H.i.s');
+        
+//        file_put_contents("gs://magicmirroruploads/orderItems_$timestamp.csv", $content);
+//		redirect("http://magicmirror.in/servepublic?name=orderItems_$timestamp.csv", 'refresh');
         //$data = 'Some file data';
 
-//        if ( ! write_file('./csvgenerated/retailerfilefromdashboard.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/retailerfilefromdashboard.csv'), 'refresh');
-//             echo 'File written!';
-//        }
-        file_put_contents("gs://magicmirroruploads/orderItems_$timestamp.csv", $content);
-		redirect("http://magicmirror.in/servepublic?name=orderItems_$timestamp.csv", 'refresh');
-        //$data = 'Some file data';
-
-//        if ( ! write_file('./csvgenerated/orderitemfile.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/orderitemfile.csv'), 'refresh');
-//             echo 'File written!';
-//        }
+        if ( ! write_file('./csvgenerated/orderitemfile.csv', $content))
+        {
+             echo 'Unable to write the file';
+        }
+        else
+        {
+            redirect(base_url('csvgenerated/orderitemfile.csv'), 'refresh');
+             echo 'File written!';
+        }
 	}
     
 //	function getorderitemforchange($id)

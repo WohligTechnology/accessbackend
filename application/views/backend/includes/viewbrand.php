@@ -15,6 +15,7 @@
                                     <th data-field="id">ID</th>
                                     <th data-field="name">name</th>
                                     <th data-field="order">order</th>
+                                    <th data-field="logo">logo</th>
                                     <th data-field="Action">Action</th>
                                 </tr>
                             </thead>
@@ -33,8 +34,8 @@
     </div>
     <script>
         function drawtable(resultrow) {
-            
-            return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.order + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editbrand?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' onclick=return confirm(\"Are you sure you want to delete?\") href='<?php echo site_url('site/deletebrand?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
+            var logo="<a href='<?php echo base_url('uploads').'/'; ?>"+resultrow.logo+"' target='_blank'><img src='<?php echo base_url('uploads').'/'; ?>"+resultrow.logo+"' width='80px' height='80px'></a>";
+            return "<tr><td>" + resultrow.id + "</td><td>" + resultrow.name + "</td><td>" + resultrow.order + "</td><td>" + logo + "</td><td><a class='btn btn-primary btn-xs' href='<?php echo site_url('site/editbrand?id=');?>" + resultrow.id + "'><i class='icon-pencil'></i></a><a class='btn btn-danger btn-xs' onclick=return confirm(\"Are you sure you want to delete?\") href='<?php echo site_url('site/deletebrand?id='); ?>" + resultrow.id + "'><i class='icon-trash '></i></a></td></tr>";
         }
         generatejquery("<?php echo $base_url;?>");
     </script>

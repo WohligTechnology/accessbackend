@@ -1,8 +1,23 @@
+<!--
 <div id="page-title">
     <a class="btn btn-primary btn-labeled fa fa-plus margined pull-right" href="<?php echo site_url("site/createproduct"); ?>">Create</a>
     <div class=" pull-right  createbtn" ><a class="btn btn-primary" href="<?php echo site_url('site/exportproductcsv'); ?>"target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>
 	</div>
     <h1 class="page-header text-overflow">product Details </h1>
+</div>
+-->
+<div class="row" style="padding:1% 0;">
+<div class="col-md-7">
+		<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary" href="<?php echo site_url('site/exportproductcsv'); ?>"target="_blank"><i class="icon-plus"></i>Export to CSV </a></div>
+	</div>
+	
+	<div class="col-md-3">
+	
+		<a class="btn btn-primary btn-pos"  href="<?php echo site_url('site/uploadproductcsv'); ?>"><i class="icon-upload"></i>Upload Product</a> &nbsp; 
+	</div>
+	<div class="col-md-2">
+	<div class=" pull-right col-md-1 createbtn" ><a class="btn btn-primary btn-poss" href="<?php echo site_url('site/createproduct'); ?>"><i class="icon-plus"></i>Create </a></div>
+	</div>
 </div>
 <div id="page-content">
     <div class="row">

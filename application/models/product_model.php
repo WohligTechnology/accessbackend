@@ -363,7 +363,7 @@ class Product_model extends CI_Model
 		
 		return $query;
 	}
-	function viewproductwaiting($product)
+	function viewproductwaiting()
 	{
 		$query=$this->db->query("SELECT `user`.`firstname`,`user`.`lastname`,`productwaiting`.`email`,`productwaiting`.`timestamp`,`productwaiting`.`id` as `id` FROM `productwaiting` 
 		LEFT JOIN `user` ON `user`.`id`=`productwaiting`.`user`
@@ -571,17 +571,17 @@ GROUP BY `product`.`id` ORDER BY  `product`.`id` DESC");
         //$data = 'Some file data';
 $timestamp=new DateTime();
         $timestamp=$timestamp->format('Y-m-d_H.i.s');
-        file_put_contents("gs://magicmirroruploads/products_$timestamp.csv", $content);
-		redirect("http://magicmirror.in/servepublic?name=products_$timestamp.csv", 'refresh');
-//        if ( ! write_file('./csvgenerated/productfile.csv', $content))
-//        {
-//             echo 'Unable to write the file';
-//        }
-//        else
-//        {
-//            redirect(base_url('csvgenerated/productfile.csv'), 'refresh');
-//             echo 'File written!';
-//        }
+//        file_put_contents("gs://magicmirroruploads/products_$timestamp.csv", $content);
+//		redirect("http://magicmirror.in/servepublic?name=products_$timestamp.csv", 'refresh');
+        if ( ! write_file('./csvgenerated/productfile.csv', $content))
+        {
+             echo 'Unable to write the file';
+        }
+        else
+        {
+            redirect(base_url('csvgenerated/productfile.csv'), 'refresh');
+             echo 'File written!';
+        }
 //		file_put_contents("gs://lylafiles/product_$timestamp.csv", $content);
 //		redirect("http://lylaloves.co.uk/servepublic?name=product_$timestamp.csv", 'refresh');
 	}
@@ -721,6 +721,43 @@ $timestamp=new DateTime();
         }else{
             return 0;
         }
+    }
+    
+    function productimagereorderbyid($id)
+    {
+        $allimages=$this->db->query("SELECT * FROM `productimage` WHERE `product`='$id' ORDER BY `order`")->result();
+        if(!empty($allimages))
+        {
+            foreach($allimages as $key=>$row)
+            {
+                $productimageid=$row->id;
+                $order=$row->order;
+                $updatequery=$this->db->query("UPDATE `productimage` SET `order`='$key' WHERE `id`='$productimageid'");
+            }
+            $selectproductimagecroncheck=$this->db->query("SELECT * FROM `productimagecroncheck` WHERE `product`='$id'")->row();
+            if(!empty($selectproductimagecroncheck))
+            {
+                $productimagecroncheckid=$selectproductimagecroncheck->id;
+                $update=$this->db->query("UPDATE `productimagecroncheck` SET `timestamp`=NULL WHERE `id`='$productimagecroncheckid'");
+            }
+            else
+            {
+                $message="Images for productid ".$id." are reordered";
+                $insert=$this->db->query("INSERT INTO `productimagecroncheck`( `product`, `message`, `timestamp`) VALUES ('$id','$message',NULL)");
+            }
+        }
+        else
+        {
+            return 0;
+        }
+        return 1;
+    
+    }
+    
+    function getproductsforimageorderchange()
+    {
+        $query=$this->db->query("SELECT * FROM `product`")->result();
+        return $query;
     }
     
 }

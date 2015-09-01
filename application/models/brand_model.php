@@ -4,11 +4,12 @@ if ( !defined( 'BASEPATH' ) )
 class brand_model extends CI_Model
 {
 	//brand
-	public function createbrand($name,$order)
+	public function createbrand($name,$order,$logo)
 	{
 		$data  = array(
 			'name' => $name,
 			'order' => $order,
+			'logo' => $logo
 		);
 		$query=$this->db->insert( 'brand', $data );
 		return  1;
@@ -26,11 +27,12 @@ class brand_model extends CI_Model
 		return $query;
 	}
 	
-	public function editbrand( $id,$name,$order)
+	public function editbrand( $id,$name,$order,$logo)
 	{
 		$data = array(
 			'name' => $name,
 			'order' => $order,
+			'logo' => $logo
 		);
 		$this->db->where( 'id', $id );
 		$this->db->update( 'brand', $data );
@@ -68,5 +70,12 @@ class brand_model extends CI_Model
          
 		
 	}
+    
+	public function getbrandlogobyid($id)
+	{
+		$query=$this->db->query("SELECT `logo` FROM `brand` WHERE `id`='$id'")->row();
+		return $query;
+	}
+	
 }
 ?>

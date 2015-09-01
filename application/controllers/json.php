@@ -1086,5 +1086,12 @@ echo $filepath;
          $this->load->view('paymentpage',$data);
      }
     
+    public function productimagereorderbyid()
+    {
+        $id=$this->input->get_post("id");
+        $data['message']=$this->product_model->productimagereorderbyid($id);
+        $this->load->view('json',$data);
+    }
+    
 }
 ?>

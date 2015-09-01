@@ -26,6 +26,21 @@
 						</div>
 					</div>
 					
+				<div class=" form-group">
+				  <label class="col-sm-2 control-label" for="normal-field">Logo</label>
+				  <div class="col-sm-4">
+					<input type="file" id="normal-field" class="form-control" name="image" value="<?php echo set_value('image',$before->logo);?>">
+					<?php if($before->logo == "")
+						 { }
+						 else
+						 { ?>
+							<img src="<?php echo base_url('uploads')."/".$before->logo; ?>" width="140px" height="140px">
+						<?php }
+					?>
+				  </div>
+				</div>
+				
+					
 					<div class="form-group">
 						<label class="col-sm-2 control-label">&nbsp;</label>
 						<div class="col-sm-4">	

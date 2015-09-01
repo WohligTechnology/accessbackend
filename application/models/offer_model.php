@@ -4,7 +4,7 @@ if ( !defined( 'BASEPATH' ) )
 class Offer_model extends CI_Model
 {
 	//offer
-	public function createoffer($title,$description,$price,$startdate,$enddate,$status)
+	public function createoffer($title,$description,$price,$startdate,$enddate,$status,$image)
 	{
 		$data  = array(
 			'title' => $title,
@@ -12,6 +12,7 @@ class Offer_model extends CI_Model
 			'price' => $price,
 			'startdate' => $startdate,
 			'enddate' => $enddate,
+			'image' => $image,
 			'status' => $status
 		);
 		$query=$this->db->insert( 'offer', $data );
@@ -30,7 +31,7 @@ class Offer_model extends CI_Model
 		return $query;
 	}
 	
-	public function editoffer($id,$title,$description,$price,$startdate,$enddate,$status)
+	public function editoffer($id,$title,$description,$price,$startdate,$enddate,$status,$image)
 	{
 		$data  = array(
 			'title' => $title,
@@ -38,6 +39,7 @@ class Offer_model extends CI_Model
 			'price' => $price,
 			'startdate' => $startdate,
 			'enddate' => $enddate,
+			'image' => $image,
 			'status' => $status
 		);
 		$this->db->where( 'id', $id );
@@ -69,6 +71,12 @@ class Offer_model extends CI_Model
 			 "0" => "Disabled",
 			);
 		return $status;
+	}
+    
+	public function getofferimagebyid($id)
+	{
+		$query=$this->db->query("SELECT `image` FROM `offer` WHERE `id`='$id'")->row();
+		return $query;
 	}
 }
 ?>

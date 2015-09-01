@@ -16,7 +16,7 @@
 			</header>
 			<div class="panel-body">
 			  
-<form class="form-horizontal tasi-form" method="post" action="http://wohlig.co.in/social/index.php/json/uploadproductcsvsubmit" enctype= "multipart/form-data">
+<form class="form-horizontal tasi-form" method="post" action="<?php echo site_url('site/uploadproductcsvsubmit');?>" enctype= "multipart/form-data">
 				
 				
 				<div class=" form-group">
