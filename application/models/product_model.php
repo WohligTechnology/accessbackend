@@ -196,6 +196,8 @@ class Product_model extends CI_Model
 		$query=$this->db->query("DELETE FROM `product` WHERE `id`='$id'");
 		$this->db->query("DELETE FROM `productcategory` WHERE `product`='$id'");
 		$this->db->query("DELETE FROM `relatedproduct` WHERE `product`='$id'");
+		$this->db->query("DELETE FROM `productimage` WHERE `product`='$id'");
+		$this->db->query("DELETE FROM `productbrand` WHERE `product`='$id'");
 	}
 	public function getcategorydropdown()
 	{
@@ -593,28 +595,62 @@ $timestamp=new DateTime();
         foreach ($file as $row)
         {
             
-            if($row['specialpricefrom'] != "")
-				$specialpricefrom = date("Y-m-d",strtotime($row['specialpricefrom']));
-			if($row['specialpriceto'] != "")
-				$specialpriceto = date("Y-m-d",strtotime($row['specialpriceto']));
-            $sku=$row['sku'];
-            $productfeatures=$row['productfeatures'];
-            $image=$row['image'];
+            if($row['Special Price From'] != "")
+				$specialpricefrom = date("Y-m-d",strtotime($row['Special Price From']));
+			if($row['Special Price To'] != "")
+				$specialpriceto = date("Y-m-d",strtotime($row['Special Price To']));
+            $sku=$row['SKU'];
+            $productfeatures=$row['Product Features'];
+            $image=$row['Images'];
             $allimages=explode(",",$image);
-            $category=$row['category'];
+            $category=$row['Category'];
             $allcategories=explode(",",$category);
             
-            $name=$row['name'];
-            $description=$row['description'];
+            $name=$row['Name'];
+            $description=$row['Description'];
             $url=$row['url'];
-            $metatitle=$row['metatitle'];
-            $metadescription=$row['metadescription'];
-            $metakeyword=$row['metakeyword'];
-            $quantity=$row['quantity'];
-            $price=$row['price'];
-            $wholesaleprice=$row['wholesaleprice'];
-            $firstsaleprice=$row['firstsaleprice'];
-            $secondsaleprice=$row['secondsaleprice'];
+            $metatitle=$row['Meta Title'];
+            $metadescription=$row['Meta Description'];
+            $metakeyword=$row['Meta Keyword'];
+            $quantity=$row['Quantity'];
+            $price=$row['Price'];
+            $wholesaleprice=$row['Wholesale Price'];
+            $firstsaleprice=$row['Firstsale Price'];
+            $secondsaleprice=$row['Secondsale Price'];
+            
+            $brand=$row['Brand'];
+            
+            $allbrand=explode(",",$brand);
+            
+            $modelnumber=$row['Model Number'];
+            $brandcolor=$row['Brand Color'];
+            $eanorupc=$row['EAN/UPC'];
+            $eanorupcmeasuringunits=$row['EAN/UPC-Measuring Unit'];
+            $type=$row['Type'];
+            $compatibledevice=$row['Compatible Device'];
+            $compatiblewith=$row['Compatible With'];
+            $material=$row['Material'];
+            $color=$row['Color'];
+            $design=$row['Design'];
+            $width=$row['Width'];
+            $height=$row['Height'];
+            $depth=$row['Depth'];
+            $portsize=$row['Port Size'];
+            $packof=$row['Pack Of'];
+            $salespackage=$row['Sales Package'];
+            $keyfeatures=$row['Key Features'];
+            $videourl=$row['Video URL'];
+            $modelname=$row['Model Name'];
+            $finish=$row['Finish'];
+            $weight=$row['Weight'];
+            $domesticwarranty=$row['Domestic Warranty'];
+            $domesticwarrantymeasuringunits=$row['Domestic Warranty Measuring Units'];
+            $internationalwarranty=$row['Internation Warranty'];
+            $internationalwarrantymeasuringunits=$row['International Warranty Measuring Units'];
+            $warrantysummary=$row['Warranty Summary'];
+            $warrantyservicetype=$row['Warranty Service Type'];
+            $coveredinwarranty=$row['Covered In Warranty'];
+            $notcoveredinwarranty=$row['Not Covered In Warranty'];
             
             $q="INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1)";
 //            echo $q;
@@ -659,16 +695,19 @@ $timestamp=new DateTime();
 //            echo $q1;
             $checkproductpresent=$this->db->query("SELECT COUNT(`id`) as `count1` FROM `product` WHERE `sku`='$sku'")->row();
 //            print_r($data);
-            echo $checkproductpresent->count1;
+//            echo $checkproductpresent->count1;
 //            $checkproductpresent->count1=0;
             if($checkproductpresent->count1 == 0)
             {
 //                $query=$this->db->insert('product', $data );
-                $query=$this->db->query("INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1)");
+                $query=$this->db->query("INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`, `modelnumber`, `brandcolor`, `eanorupc`, `eanorupcmeasuringunits`, `type`, `compatibledevice`, `compatiblewith`, `material`, `color`, `design`, `width`, `height`, `depth`, `portsize`, `packof`, `salespackage`, `keyfeatures`, `videourl`, `modelname`, `finish`, `weight`, `domesticwarranty`, `domesticwarrantymeasuringunits`, `internationalwarranty`, `internationalwarrantymeasuringunits`, `warrantysummary`, `warrantyservicetype`, `coveredinwarranty`, `notcoveredinwarranty`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1,'$modelnumber','$brandcolor','$eanorupc','$eanorupcmeasuringunits','$type','$compatibledevice','$compatiblewith','$material','$color','$design','$width','$height','$depth','$portsize','$packof','$salespackage','$keyfeatures','$videourl','$modelname','$finish','$weight','$domesticwarranty','$domesticwarrantymeasuringunits','$internationalwarranty','$internationalwarrantymeasuringunits','$warrantysummary','$warrantyservicetype','$coveredinwarranty','$notcoveredinwarranty')");
                 $productid=$this->db->insert_id();
 //                echo "pid".$productid;
             }
-            
+            else
+            {
+            return 0;
+            }
 			foreach($allimages as $key => $image)
 			{
 				$data1  = array(
@@ -697,7 +736,28 @@ $timestamp=new DateTime();
 					'product' => $productid,
 					'category' => $categoryid,
 				);
-				$queryproductimage=$this->db->insert( 'productcategory', $data2 );
+				$queryproductcategory=$this->db->insert( 'productcategory', $data2 );
+			}
+            
+			foreach($allbrand as $key => $brand)
+			{
+                $brand=trim($brand);
+                $brandquery=$this->db->query("SELECT * FROM `brand` where `name` LIKE '$brand'")->row();
+                if(empty($brandquery))
+                {
+                    $this->db->query("INSERT INTO `brand`(`name`) VALUES ('$brand')");
+                    $brandid=$this->db->insert_id();
+                }
+                else
+                {
+                    $brandid=$brandquery->id;
+                }
+            
+				$data2  = array(
+					'product' => $productid,
+					'brand' => $brandid,
+				);
+				$queryproductbrand=$this->db->insert( 'productbrand', $data2 );
 			}
         }
 		if(!$query)

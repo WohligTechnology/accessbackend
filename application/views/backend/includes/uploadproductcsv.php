@@ -4,9 +4,10 @@
 		<div class=" pull-right col-md-1 createbtn" ><a href="<?php echo site_url('site/viewproduct'); ?>" class="btn btn-primary pull-right"><i class="icon-long-arrow-left"></i>&nbsp;Back</a> </div>
 	</div>
 	<div class="col-md-3">
-<!--		<a class="btn btn-default"  href="<?php echo base_url('uploads/product.csv'); ?>"><i class="icon-upload"></i>Download CSV Format</a> -->
-		<a class="btn btn-default"  href="http://storage.googleapis.com/magicmirrorcsv/product%20(11).csv"><i class="icon-upload"></i>Download CSV Format</a> 
+		<a class="btn btn-default"  href="<?php echo base_url('uploads/product_access.csv'); ?>"><i class="icon-upload"></i>Download CSV Format</a> 
+<!--		<a class="btn btn-default"  href="http://storage.googleapis.com/magicmirrorcsv/product%20(11).csv"><i class="icon-upload"></i>Download CSV Format</a> -->
 <!--	</div>-->
+</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">

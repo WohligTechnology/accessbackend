@@ -74,7 +74,7 @@ $active_record = TRUE;
 //$db['testing']['autoinit'] = TRUE;
 //$db['testing']['stricton'] = FALSE;
 
-    $db['testing']['hostname'] = 'localhost';
+$db['testing']['hostname'] = 'localhost';
 $db['testing']['username'] = 'root';
 $db['testing']['password'] = '6dL8+ph4H!LiCT';
 $db['testing']['database'] = 'access';

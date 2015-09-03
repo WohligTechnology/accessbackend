@@ -29,7 +29,7 @@
                         <table class="table table-hover" id="" cellpadding="0" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="selecctall"/> Selecct All</th>
+                                    <th><input type="checkbox" id="selecctall"/> Select All</th>
                                     <th data-field="id">ID</th>
                                     <th data-field="name">Name</th>
                                     <th data-field="sku">SKU</th>
