@@ -617,6 +617,7 @@ class Site extends CI_Controller
 		$data['category']=$this->product_model->getcategorydropdown();
 		$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
+        $data['type']=$this->brand_model->gettypedropdown();
 		$data[ 'page' ] = 'createproduct';
 		$data[ 'title' ] = 'Create product';
 		$this->load->view( 'template', $data );	
@@ -673,11 +674,34 @@ class Site extends CI_Controller
 			$category=$this->input->post('category');
 			$relatedproduct=$this->input->post('relatedproduct');
 			$brand=$this->input->post('brand');
+			$type=$this->input->post('type');
+            
+			$modelnumber=$this->input->post('modelnumber');
+			$brandcolor=$this->input->post('brandcolor');
+			$eanorupc=$this->input->post('eanorupc');
+			$eanorupcmeasuringunits=$this->input->post('eanorupcmeasuringunits');
+			$compatibledevice=$this->input->post('compatibledevice');
+			$compatiblewith=$this->input->post('compatiblewith');
+			$material=$this->input->post('material');
+			$color=$this->input->post('color');
+			$width=$this->input->post('width');
+			$height=$this->input->post('height');
+			$depth=$this->input->post('depth');
+			$salespackage=$this->input->post('salespackage');
+			$keyfeatures=$this->input->post('keyfeatures');
+			$videourl=$this->input->post('videourl');
+			$modelname=$this->input->post('modelname');
+			$finish=$this->input->post('finish');
+			$weight=$this->input->post('weight');
+			$domesticwarranty=$this->input->post('domesticwarranty');
+			$warrantysummary=$this->input->post('warrantysummary');
+			$size=$this->input->post('size');
+            
 			if($specialpricefrom != "")
 				$specialpricefrom = date("Y-m-d",strtotime($specialpricefrom));
 			if($specialpriceto != "")
 				$specialpriceto = date("Y-m-d",strtotime($specialpriceto));
-			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand)==0)
+			if($this->product_model->createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size)==0)
 			$data['alerterror']="New product could not be created.";
 			else
 			$data['alertsuccess']="product  created Successfully.";
@@ -778,6 +802,8 @@ class Site extends CI_Controller
 		$data['visibility']=$this->product_model->getvisibility();
         $data['brand']=$this->brand_model->getbranddropdown();
         $data['selectedbrand']=$this->brand_model->getbrandbyproduct($this->input->get_post('id'));
+        $data['type']=$this->brand_model->gettypedropdown();
+        $data['selectedtype']=$this->brand_model->gettypebyproduct($this->input->get_post('id'));
      
 		$data['page']='editproduct';
 		$data['page2']='block/productblock';
@@ -844,7 +870,31 @@ class Site extends CI_Controller
 			$category=$this->input->post('category');
 			$relatedproduct=$this->input->post('relatedproduct');
 			$brand=$this->input->post('brand');
-			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand)==0)
+			$type=$this->input->post('type');
+            
+            
+			$modelnumber=$this->input->post('modelnumber');
+			$brandcolor=$this->input->post('brandcolor');
+			$eanorupc=$this->input->post('eanorupc');
+			$eanorupcmeasuringunits=$this->input->post('eanorupcmeasuringunits');
+			$compatibledevice=$this->input->post('compatibledevice');
+			$compatiblewith=$this->input->post('compatiblewith');
+			$material=$this->input->post('material');
+			$color=$this->input->post('color');
+			$width=$this->input->post('width');
+			$height=$this->input->post('height');
+			$depth=$this->input->post('depth');
+			$salespackage=$this->input->post('salespackage');
+			$keyfeatures=$this->input->post('keyfeatures');
+			$videourl=$this->input->post('videourl');
+			$modelname=$this->input->post('modelname');
+			$finish=$this->input->post('finish');
+			$weight=$this->input->post('weight');
+			$domesticwarranty=$this->input->post('domesticwarranty');
+			$warrantysummary=$this->input->post('warrantysummary');
+			$size=$this->input->post('size');
+            
+			if($this->product_model->editproduct($id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size)==0)
 			$data['alerterror']="product Editing was unsuccesful";
 			else
 			$data['alertsuccess']="product edited Successfully.";
@@ -4295,7 +4345,135 @@ class Site extends CI_Controller
         $this->load->view("redirect",$data);
 	}
     
-    
+    //type
+	public function createtype()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data[ 'page' ] = 'createtype';
+		$data[ 'title' ] = 'Create type';
+		$this->load->view( 'template', $data );	
+	}
+	function createtypesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data[ 'page' ] = 'createtype';
+			$data[ 'title' ] = 'Create type';
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$name=$this->input->post('name');
+			$content=$this->input->post('content');
+			if($this->type_model->createtype($name)==0)
+			$data['alerterror']="New type could not be created.";
+			else
+			$data['alertsuccess']="type  created Successfully.";
+			$data['table']=$this->type_model->viewtype();
+			$data['redirect']="site/viewtype";
+			$this->load->view("redirect",$data);
+		}
+	}
+    public function viewtype()
+    {
+        $access=array("1");
+        $this->checkaccess($access);
+		$data['page']='viewtype';
+        $data["base_url"]=site_url("site/viewtypejson");
+        $data["title"]="View type";
+        $this->load->view("template",$data);
+    }
+    function viewtypejson()
+    {
+        $elements=array();
+        $elements[0]=new stdClass();
+        $elements[0]->field="`type`.`id`";
+        $elements[0]->sort="1";
+        $elements[0]->header="ID";
+        $elements[0]->alias="id";
+        
+        $elements[1]=new stdClass();
+        $elements[1]->field="`type`.`name`";
+        $elements[1]->sort="1";
+        $elements[1]->header="name";
+        $elements[1]->alias="name";
+        
+        $search=$this->input->get_post("search");
+        $pageno=$this->input->get_post("pageno");
+        $orderby=$this->input->get_post("orderby");
+        $orderorder=$this->input->get_post("orderorder");
+        $maxrow=$this->input->get_post("maxrow");
+        if($maxrow=="")
+        {
+            $maxrow=20;
+        }
+        if($orderby=="")
+        {
+            $orderby="id";
+            $orderorder="ASC";
+        }
+        $data["message"]=$this->chintantable->query($pageno,$maxrow,$orderby,$orderorder,$search,$elements,"FROM `type`");
+        $this->load->view("json",$data);
+    }
+
+//	function viewtype()
+//	{
+//		$access = array("1");
+//		$this->checkaccess($access);
+//		$data['table']=$this->type_model->viewtype();
+//		$data['page']='viewtype';
+//		$data['title']='View type';
+//		$this->load->view('template',$data);
+//	}
+	function edittype()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$data['before']=$this->type_model->beforeedittype($this->input->get('id'));
+		$data['page']='edittype';
+		$data['title']='Edit type';
+		$this->load->view('template',$data);
+	}
+	function edittypesubmit()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->form_validation->set_rules('name','Name','trim|required');
+		if($this->form_validation->run() == FALSE)	
+		{
+			$data['alerterror'] = validation_errors();
+			$data['before']=$this->type_model->beforeedittype($this->input->post('id'));
+			$data['page']='edittype';
+			$data['title']='Edit type';
+			$this->load->view('template',$data);
+		}
+		else
+		{
+			$id=$this->input->post('id');
+			$name=$this->input->post('name');
+			if($this->type_model->edittype($id,$name)==0)
+			$data['alerterror']="type Editing was unsuccesful";
+			else
+			$data['alertsuccess']="type edited Successfully.";
+			$data['redirect']="site/viewtype";
+			$this->load->view("redirect",$data);
+		}
+	}
+	function deletetype()
+	{
+		$access = array("1");
+		$this->checkaccess($access);
+		$this->type_model->deletetype($this->input->get('id'));
+		$data['alertsuccess']="type Deleted Successfully";
+        $data['redirect']="site/viewtype";
+        $this->load->view("redirect",$data);
+	}
     
 }
 ?>

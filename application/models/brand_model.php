@@ -76,6 +76,36 @@ class brand_model extends CI_Model
 		$query=$this->db->query("SELECT `logo` FROM `brand` WHERE `id`='$id'")->row();
 		return $query;
 	}
+    
+	public function gettypedropdown()
+	{
+		$query=$this->db->query("SELECT * FROM `type`  ORDER BY `id` ASC")->result();
+		$return=array(
+		);
+		foreach($query as $row)
+		{
+			$return[$row->id]=$row->name;
+		}
+		
+		return $return;
+	}
 	
+    public function gettypebyproduct($id)
+	{
+         $return=array();
+		$query=$this->db->query("SELECT `id`,`product`,`type` FROM `producttype`  WHERE `product`='$id'");
+        if($query->num_rows() > 0)
+        {
+            $query=$query->result();
+            foreach($query as $row)
+            {
+                $return[]=$row->type;
+            }
+        }
+         return $return;
+         
+		
+	}
+    
 }
 ?>

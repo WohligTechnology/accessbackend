@@ -12,7 +12,7 @@
 						  <input type="text" id="normal-field" class="form-control" name="name" value="<?php echo set_value('name');?>">
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" style="display:none;">
 						<label class="col-sm-2 control-label">SKU</label>
 						<div class="col-sm-4">
 						  <input type="text" id="normal-field" class="form-control" name="sku" value="<?php echo set_value('sku');?>">
@@ -28,7 +28,15 @@
 					?>
 				  </div>
 				</div>
-			
+			    <div class=" form-group">
+				  <label class="col-sm-2 control-label">Types</label>
+				  <div class="col-sm-4">
+					<?php
+						
+						echo form_dropdown('type[]',$type,set_value('type'),'id="select4" class="chzn-select form-control" 	data-placeholder="Choose an type..." multiple');
+					?>
+				  </div>
+				</div>
 					<div class="form-group">
 						<label class="col-sm-2 control-label">Description</label>
 						<div class="col-sm-4">
@@ -131,6 +139,147 @@
 						  <input type="text" id="normal-field" class="form-control" name="quantity" value="<?php echo set_value('quantity');?>">
 						</div>
 					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Model Number</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="modelnumber" value="<?php echo set_value('modelnumber');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Brand Color</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="brandcolor" value="<?php echo set_value('brandcolor');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">EAN/UPC</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="eanorupc" value="<?php echo set_value('eanorupc');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">EAN/UPC Measuring Units</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="eanorupcmeasuringunits" value="<?php echo set_value('eanorupcmeasuringunits');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">compatibledevice</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="compatibledevice" value="<?php echo set_value('compatibledevice');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">compatiblewith</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="compatiblewith" value="<?php echo set_value('compatiblewith');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">material</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="material" value="<?php echo set_value('material');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">color</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="color" value="<?php echo set_value('color');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">width</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="width" value="<?php echo set_value('width');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">height</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="height" value="<?php echo set_value('height');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">depth</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="depth" value="<?php echo set_value('depth');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">salespackage</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="salespackage" value="<?php echo set_value('salespackage');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">keyfeatures</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="keyfeatures" value="<?php echo set_value('keyfeatures');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">videourl</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="videourl" value="<?php echo set_value('videourl');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">modelname</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="modelname" value="<?php echo set_value('modelname');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">finish</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="finish" value="<?php echo set_value('finish');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">weight</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="weight" value="<?php echo set_value('weight');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Warranty</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="domesticwarranty" value="<?php echo set_value('domesticwarranty');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">warrantysummary</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="warrantysummary" value="<?php echo set_value('warrantysummary');?>">
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label class="col-sm-2 control-label">size</label>
+						<div class="col-sm-4">
+						  <input type="text" id="normal-field" class="form-control" name="size" value="<?php echo set_value('size');?>">
+						</div>
+					</div>
+					
 					<div class=" form-group">
 					  <label class="col-sm-2 control-label">Status</label>
 					  <div class="col-sm-4">

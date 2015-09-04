@@ -25,7 +25,7 @@ class Product_model extends CI_Model
 //        $query=$this->db->query("INSERT INTO `userwishlist`(`user`,`product`) VALUES ('$user','$product')");
 //        return $query;
     }
-	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand)
+	public function createproduct($name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size)
 	{
 		$data  = array(
 			'name' => $name,
@@ -44,13 +44,38 @@ class Product_model extends CI_Model
 			'metakeyword' => $metakeyword,
 			'quantity' => $quantity,
 			'status' => $status,
+            'modelnumber' => $modelnumber,
+			'brandcolor' => $brandcolor,
+			'eanorupc' => $eanorupc,
+			'eanorupcmeasuringunits' => $eanorupcmeasuringunits,
+			'compatibledevice' => $compatibledevice,
+			'compatiblewith' => $compatiblewith,
+			'material' => $material,
+			'color' => $color,
+			'width' => $width,
+			'height' => $height,
+			'depth' => $depth,
+			'salespackage' => $salespackage,
+			'keyfeatures' => $keyfeatures,
+			'videourl' => $videourl,
+			'modelname' => $modelname,
+			'finish' => $finish,
+			'weight' => $weight,
+			'domesticwarranty' => $domesticwarranty,
+			'warrantysummary' => $warrantysummary,
+			'size' => $size
 		);
 		$query=$this->db->insert( 'product', $data );
 		$id=$this->db->insert_id();
-        
+        $productid=$id;
         foreach($brand AS $key=>$value)
         {
             $this->product_model->createproductbrand($value,$productid);
+        }
+    
+        foreach($type AS $key=>$value)
+        {
+            $this->product_model->createproducttype($value,$productid);
         }
     
 		if(!empty($category))
@@ -92,6 +117,15 @@ class Product_model extends CI_Model
 		$query=$this->db->insert( 'productbrand', $data );
 		return  1;
 	}
+    public function createproducttype($value,$productid)
+	{
+		$data  = array(
+			'type' => $value,
+			'product' => $productid
+		);
+		$query=$this->db->insert( 'producttype', $data );
+		return  1;
+	}
     function deleteall($id)
     {
         
@@ -130,7 +164,7 @@ class Product_model extends CI_Model
 		return $query;
 	}
 	
-	public function editproduct( $id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand)
+	public function editproduct( $id,$name,$sku,$description,$url,$visibility,$price,$wholesaleprice,$firstsaleprice,$secondsaleprice,$specialpricefrom,$specialpriceto,$metatitle,$metadesc,$metakeyword,$quantity,$status,$category,$relatedproduct,$brand,$type,$modelnumber,$brandcolor,$eanorupc,$eanorupcmeasuringunits,$compatibledevice,$compatiblewith,$material,$color,$width,$height,$depth,$salespackage,$keyfeatures,$videourl,$modelname,$finish,$weight,$domesticwarranty,$warrantysummary,$size)
 	{
 		$data = array(
 			'name' => $name,
@@ -149,16 +183,42 @@ class Product_model extends CI_Model
 			'metakeyword' => $metakeyword,
 			'quantity' => $quantity,
 			'status' => $status,
+            'modelnumber' => $modelnumber,
+			'brandcolor' => $brandcolor,
+			'eanorupc' => $eanorupc,
+			'eanorupcmeasuringunits' => $eanorupcmeasuringunits,
+			'compatibledevice' => $compatibledevice,
+			'compatiblewith' => $compatiblewith,
+			'material' => $material,
+			'color' => $color,
+			'width' => $width,
+			'height' => $height,
+			'depth' => $depth,
+			'salespackage' => $salespackage,
+			'keyfeatures' => $keyfeatures,
+			'videourl' => $videourl,
+			'modelname' => $modelname,
+			'finish' => $finish,
+			'weight' => $weight,
+			'domesticwarranty' => $domesticwarranty,
+			'warrantysummary' => $warrantysummary,
+			'size' => $size
 		);
 		$this->db->where( 'id', $id );
 		$q=$this->db->update( 'product', $data );
 		$this->db->query("DELETE FROM `productcategory` WHERE `product`='$id'");
 		$this->db->query("DELETE FROM `relatedproduct` WHERE `product`='$id'");
 		$this->db->query("DELETE FROM `productbrand` WHERE `product`='$id'");
+		$this->db->query("DELETE FROM `producttype` WHERE `product`='$id'");
         
         foreach($brand AS $key=>$value)
         {
             $this->product_model->createproductbrand($value,$id);
+        }
+    
+        foreach($type AS $key=>$value)
+        {
+            $this->product_model->createproducttype($value,$id);
         }
     
 		if(!empty($category))
@@ -562,10 +622,14 @@ class Product_model extends CI_Model
     function exportproductcsv()
 	{
 		$this->load->dbutil();
-		$query=$this->db->query("SELECT  `product`.`id`  AS `id` ,  `product`.`name`  AS `name` ,  `product`.`sku`  AS `sku` ,  `product`.`url`  AS `url` ,  `product`.`price`  AS `price` ,  `product`.`wholesaleprice`  AS `wholesaleprice` ,  `product`.`firstsaleprice`  AS `firstsaleprice` ,  `product`.`secondsaleprice`  AS `secondsaleprice` ,  `product`.`specialpriceto`  AS `specialpriceto` ,  `product`.`specialpricefrom`  AS `specialpricefrom` , GROUP_CONCAT(`productimage`.`image`) AS `image`, GROUP_CONCAT(`category`.`name`) AS `category`, `product`.`quantity`  AS `quantity` 
+		$query=$this->db->query("SELECT  `product`.`id`  AS `id` ,  `product`.`name`  AS `Name`, GROUP_CONCAT(`brand`.`name`) AS `Brand`, `product`.`modelnumber`, `product`.`brandcolor`, `product`.`eanorupc`, `product`.`eanorupcmeasuringunits`, GROUP_CONCAT(`type`.`name`) AS `Type`, `product`.`compatibledevice`,`product`.`compatiblewith` ,  `product`.`price`  AS `price` ,  `product`.`wholesaleprice`  AS `wholesaleprice` ,  `product`.`firstsaleprice`  AS `firstsaleprice` ,  `product`.`secondsaleprice`  AS `secondsaleprice` ,  `product`.`specialpriceto`  AS `specialpriceto` ,  `product`.`specialpricefrom`  AS `specialpricefrom` , GROUP_CONCAT(`productimage`.`image`) AS `image`, GROUP_CONCAT(`category`.`name`) AS `category`, `product`.`quantity`  AS `quantity` 
 FROM `product` 
 INNER JOIN `productcategory` ON `product`.`id`=`productcategory`.`product` 
 INNER JOIN `category` ON `category`.`id`=`productcategory`.`category` 
+INNER JOIN `producttype` ON `product`.`id`=`producttype`.`product` 
+INNER JOIN `type` ON `type`.`id`=`producttype`.`type`  
+INNER JOIN `productbrand` ON `product`.`id`=`productbrand`.`product` 
+INNER JOIN `brand` ON `brand`.`id`=`productbrand`.`brand` 
 LEFT OUTER JOIN `productimage` ON `productimage`.`product`=`product`.`id` 
 GROUP BY `product`.`id` ORDER BY  `product`.`id` DESC");
 
@@ -626,7 +690,10 @@ $timestamp=new DateTime();
             $brandcolor=$row['Brand Color'];
             $eanorupc=$row['EAN/UPC'];
             $eanorupcmeasuringunits=$row['EAN/UPC-Measuring Unit'];
+            
             $type=$row['Type'];
+            $alltype=explode(",",$type);
+            
             $compatibledevice=$row['Compatible Device'];
             $compatiblewith=$row['Compatible With'];
             $material=$row['Material'];
@@ -643,7 +710,7 @@ $timestamp=new DateTime();
             $modelname=$row['Model Name'];
             $finish=$row['Finish'];
             $weight=$row['Weight'];
-            $domesticwarranty=$row['Domestic Warranty'];
+            $domesticwarranty=$row['Warranty'];
             $domesticwarrantymeasuringunits=$row['Domestic Warranty Measuring Units'];
             $internationalwarranty=$row['Internation Warranty'];
             $internationalwarrantymeasuringunits=$row['International Warranty Measuring Units'];
@@ -651,6 +718,7 @@ $timestamp=new DateTime();
             $warrantyservicetype=$row['Warranty Service Type'];
             $coveredinwarranty=$row['Covered In Warranty'];
             $notcoveredinwarranty=$row['Not Covered In Warranty'];
+            $size=$row['Size'];
             
             $q="INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1)";
 //            echo $q;
@@ -692,22 +760,21 @@ $timestamp=new DateTime();
 			'status' => 1
 		);
             $q1="SELECT COUNT(`id`) as `count1` FROM `product` WHERE `sku`='$sku'";
-//            echo $q1;
+            
             $checkproductpresent=$this->db->query("SELECT COUNT(`id`) as `count1` FROM `product` WHERE `sku`='$sku'")->row();
-//            print_r($data);
-//            echo $checkproductpresent->count1;
-//            $checkproductpresent->count1=0;
-            if($checkproductpresent->count1 == 0)
-            {
+            
+//            if($checkproductpresent->count1 == 0)
+//            {
 //                $query=$this->db->insert('product', $data );
-                $query=$this->db->query("INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`, `modelnumber`, `brandcolor`, `eanorupc`, `eanorupcmeasuringunits`, `type`, `compatibledevice`, `compatiblewith`, `material`, `color`, `design`, `width`, `height`, `depth`, `portsize`, `packof`, `salespackage`, `keyfeatures`, `videourl`, `modelname`, `finish`, `weight`, `domesticwarranty`, `domesticwarrantymeasuringunits`, `internationalwarranty`, `internationalwarrantymeasuringunits`, `warrantysummary`, `warrantyservicetype`, `coveredinwarranty`, `notcoveredinwarranty`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1,'$modelnumber','$brandcolor','$eanorupc','$eanorupcmeasuringunits','$type','$compatibledevice','$compatiblewith','$material','$color','$design','$width','$height','$depth','$portsize','$packof','$salespackage','$keyfeatures','$videourl','$modelname','$finish','$weight','$domesticwarranty','$domesticwarrantymeasuringunits','$internationalwarranty','$internationalwarrantymeasuringunits','$warrantysummary','$warrantyservicetype','$coveredinwarranty','$notcoveredinwarranty')");
+                $query=$this->db->query("INSERT INTO `product`( `name`, `sku`, `description`, `url`, `visibility`, `price`, `wholesaleprice`, `firstsaleprice`, `secondsaleprice`, `specialpriceto`, `specialpricefrom`, `metatitle`, `metadesc`, `metakeyword`, `quantity`, `status`, `modelnumber`, `brandcolor`, `eanorupc`, `eanorupcmeasuringunits`, `type`, `compatibledevice`, `compatiblewith`, `material`, `color`, `design`, `width`, `height`, `depth`, `portsize`, `packof`, `salespackage`, `keyfeatures`, `videourl`, `modelname`, `finish`, `weight`, `domesticwarranty`, `domesticwarrantymeasuringunits`, `internationalwarranty`, `internationalwarrantymeasuringunits`, `warrantysummary`, `warrantyservicetype`, `coveredinwarranty`, `notcoveredinwarranty`,`size`) VALUES ('$name','$sku','$description','$url','1','$price','$wholesaleprice','$firstsaleprice','$secondsaleprice','$specialpriceto','$specialpricefrom','$metatitle','$metadescription','$metakeyword','$quantity',1,'$modelnumber','$brandcolor','$eanorupc','$eanorupcmeasuringunits','$type','$compatibledevice','$compatiblewith','$material','$color','$design','$width','$height','$depth','$portsize','$packof','$salespackage','$keyfeatures','$videourl','$modelname','$finish','$weight','$domesticwarranty','$domesticwarrantymeasuringunits','$internationalwarranty','$internationalwarrantymeasuringunits','$warrantysummary','$warrantyservicetype','$coveredinwarranty','$notcoveredinwarranty','$size')");
                 $productid=$this->db->insert_id();
 //                echo "pid".$productid;
-            }
-            else
-            {
-            return 0;
-            }
+                
+//            }
+//            else
+//            {
+//            return 0;
+//            }
 			foreach($allimages as $key => $image)
 			{
 				$data1  = array(
@@ -758,6 +825,27 @@ $timestamp=new DateTime();
 					'brand' => $brandid,
 				);
 				$queryproductbrand=$this->db->insert( 'productbrand', $data2 );
+			}
+            
+			foreach($alltype as $key => $type)
+			{
+                $type=trim($type);
+                $typequery=$this->db->query("SELECT * FROM `type` where `name` LIKE '$type'")->row();
+                if(empty($typequery))
+                {
+                    $this->db->query("INSERT INTO `type`(`name`) VALUES ('$type')");
+                    $typeid=$this->db->insert_id();
+                }
+                else
+                {
+                    $typeid=$typequery->id;
+                }
+            
+				$data2  = array(
+					'product' => $productid,
+					'type' => $typeid,
+				);
+				$queryproducttype=$this->db->insert( 'producttype', $data2 );
 			}
         }
 		if(!$query)
